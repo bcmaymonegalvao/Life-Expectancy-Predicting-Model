@@ -7,6 +7,8 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 
+st.set_page_config(page_title="Previsor de Expectativa de Vida", layout="wide")
+
 # =========================
 # 1. Função Mock do Modelo
 # =========================
@@ -43,7 +45,6 @@ input_df = load_data()
 # =========================
 # 3. Interface Streamlit
 # =========================
-st.set_page_config(page_title="Previsor de Expectativa de Vida", layout="wide")
 st.title("🔮 Previsor de Expectativa de Vida")
 st.write("Aplicação interativa que utiliza dados públicos para prever a expectativa de vida com base em fatores socioeconômicos e de saúde.")
 
@@ -166,3 +167,4 @@ if st.button("Prever Expectativa de Vida"):
         fig, ax = plt.subplots()
         sns.heatmap(corr_df, annot=True, cmap="coolwarm", cbar=True, ax=ax)
         st.pyplot(fig)
+
