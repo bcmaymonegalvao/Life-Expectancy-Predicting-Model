@@ -142,10 +142,13 @@ if st.button("Prever Expectativa de Vida"):
         st.altair_chart(scatter.properties(height=400), use_container_width=True)
 
         # --- Cálculo da regressão (coeficientes) ---
-        X = processed_df[["prediction"]].values
-        y = processed_df[selected_var].values
+        # Selecionar apenas colunas necessárias
+        reg_df = processed_df[["prediction", selected_var]].dropna()
 
-        if len(X) > 1 and len(np.unique(y)) > 1:
+        if len(reg_df) > 1 and len(np.unique(reg_df[selected_var])) > 1:
+            X = reg_df[["prediction"]].values
+            y = reg_df[selected_var].values
+
             model = LinearRegression().fit(X, y)
             slope = model.coef_[0]
             intercept = model.intercept_
@@ -157,8 +160,9 @@ if st.button("Prever Expectativa de Vida"):
                 f"**R² = {r2:.3f}**"
             )
         else:
-            st.warning("Não há variabilidade suficiente nos dados filtrados para calcular regressão.")
+            st.warning("Não há dados suficientes (ou variabilidade) para calcular regressão após remoção de valores ausentes.")
 
+    
     # --- Heatmap de Correlação ---
     with st.container(border=True):
         st.markdown(f"### 🌡️ Heatmap de Correlação entre Prediction e {selected_var}")
@@ -167,4 +171,5 @@ if st.button("Prever Expectativa de Vida"):
         fig, ax = plt.subplots()
         sns.heatmap(corr_df, annot=True, cmap="coolwarm", cbar=True, ax=ax)
         st.pyplot(fig)
+
 
